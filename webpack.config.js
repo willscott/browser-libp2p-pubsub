@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
   mode: 'development',
@@ -10,5 +11,18 @@ module.exports = {
   devtool: 'inline-source-map',
   devServer: {
     contentBase: './demo',
-  }
+  },
+  resolve: {
+    fallback: {
+      "assert": require.resolve("assert/"),
+      "stream": require.resolve("stream-browserify/"),
+      "util": require.resolve("util/")
+    }
+  },
+  plugins: [
+    new webpack.ProvidePlugin({
+      process: 'process/browser',
+      Buffer: ['buffer', 'Buffer'],
+    }),
+  ],
 };
