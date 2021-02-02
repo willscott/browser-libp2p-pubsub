@@ -6,7 +6,19 @@ let node = null;
 
 module.exports = async () => {
     if (!node) {
-        node = ipfs.create({ repo: String(Math.random() + Date.now()) })
+        node = ipfs.create({
+            repo: '/tmp/chatapp',
+            libp2p: {
+                config: {
+                    dht: {
+                        enabled: true
+                    },
+                    pubsub: {
+                        enabled: true
+                    }
+                }
+            }
+        })
     }
     return await node;
 }

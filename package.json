@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/willscott/browser-libp2p-pubsub#readme",
   "dependencies": {
+    "cids": "^1.1.5",
     "ipfs": "^0.54.0"
   },
   "devDependencies": {
