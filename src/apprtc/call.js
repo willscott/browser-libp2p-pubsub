@@ -24,7 +24,11 @@ var Call = function(params) {
   this.params_ = params;
   this.roomServer_ = params.roomServer || '';
 
-  this.channel_ = new SignalingChannel(params.wssUrl, params.wssPostUrl);
+  if (typeof params.wssUrl !== 'string') {
+    this.channel_ = params.wssUrl;
+  } else {
+    this.channel_ = new SignalingChannel(params.wssUrl, params.wssPostUrl);
+  }
   this.channel_.onmessage = this.onRecvSignalingChannelMessage_.bind(this);
 
   this.pcClient_ = null;
@@ -111,7 +115,7 @@ Call.prototype.hangup = function(async) {
     step: function() {
       // Send POST request to /leave.
       var path = this.getLeaveUrl_();
-      return sendUrlRequest('POST', path, async);
+      return true; //sendUrlRequest('POST', path, async);
     }.bind(this),
     errorString: 'Error sending /leave:'
   });
@@ -457,6 +461,7 @@ Call.prototype.joinRoom_ = function() {
     var path = this.roomServer_ + '/join/' +
         this.params_.roomId + window.location.search;
 
+    /*
     sendAsyncUrlRequest('POST', path).then(function(response) {
       var responseObj = parseJSON(response);
       if (!responseObj) {
@@ -481,6 +486,15 @@ Call.prototype.joinRoom_ = function() {
       reject(Error('Failed to join the room: ' + error.message));
       return;
     }.bind(this));
+    */
+   resolve({
+    client_id: this.params_.client_id,
+    room_id: this.params_.roomId,
+    room_link: this.params_.roomLink,
+    is_initiator: this.params_.isInitiator,
+
+    messages: [],
+   })
   }.bind(this));
 };
 

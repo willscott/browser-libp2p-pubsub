@@ -1,19 +1,14 @@
 'use strict'
 
 const AppController = require('../apprtc/appcontroller');
-const service = require('../service');
+const ipfschannel = require('../ipfschannel')
 
 class AppRTC extends HTMLElement {
     constructor() {
         super()
-        this.linkService()
         setTimeout(this.startup.bind(this), 0)
     }
 
-    async linkService() {
-        let node = await service();
-        this.node = node;
-    }
     startup() {
         this.room = this.getAttribute('room');
         this.appendChild(AppRTC.Template.content.cloneNode(true));
@@ -23,7 +18,7 @@ class AppRTC extends HTMLElement {
             warningMessages: false,
             roomId: this.room,
             roomLink: window.location.href,
-            mediaConstraints: {},
+            mediaConstraints: {'audio':{'optional':[]},'video':{'optional':[]}},
             offerOptions: {},
             peerConnectionConfig: {
                 'iceServers': [],
@@ -33,7 +28,7 @@ class AppRTC extends HTMLElement {
             peerConnectionConstraints: {'optional': []},
             iceServerRequestUrl: '',
             iceServerTransports: '',
-            wssUrl: this.node,
+            wssUrl: new ipfschannel(),
             wssPostUrl: '',
             bypassJoinConfirmation: true,
             versionInfo: 'libp2p-dev',
