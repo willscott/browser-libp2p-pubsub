@@ -1,12 +1,12 @@
 {
-  "name": "browser-libp2p-pubsub",
+  "name": "@willscott/browser-libp2p-pubsub",
   "version": "1.0.0",
   "description": "message channel in the browser",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
-    "build-prod": "webpack build --mode=production",
+    "build-prod": "webpack-cli build --no-devtool --mode=production",
     "start": "webpack serve --open"
   },
   "repository": {
@@ -22,6 +22,7 @@
     "url": "https://github.com/willscott/browser-libp2p-pubsub/issues"
   },
   "homepage": "https://github.com/willscott/browser-libp2p-pubsub#readme",
+  "publishConfig": { "registry": "https://npm.pkg.github.com/" },
   "dependencies": {
     "cids": "^1.1.5",
     "ipfs": "^0.54.0"
