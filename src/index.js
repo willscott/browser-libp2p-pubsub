@@ -4,6 +4,7 @@ const changeEvent = require('./event');
 
 const root = require('./component/root');
 const chat = require('./component/chat');
+const apprtc = require('./component/apprtc');
 
 let renderedRoot = null;
 
@@ -29,6 +30,7 @@ async function UpdateState(s) {
 let onLoad = () => {
     renderer.Register(root);
     renderer.Register(chat);
+    renderer.Register(apprtc);
 
     document.addEventListener(changeEvent.Event.type, async () => {
         let newState = await GetState();

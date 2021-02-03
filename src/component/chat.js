@@ -45,6 +45,16 @@ class chatroom extends HTMLElement {
         this.onProvider(node.libp2p._dht.findProviders(myCid))
         this.watchTopic()
         node.libp2p._dht.provide(myCid)
+
+        let rtc = document.createElement('app-rtc');
+        rtc.setAttribute('room', this.room);
+        rtc.setAttribute('slot', 'video');
+        rtc.style.position = 'absolute';
+        rtc.style.left = 0;
+        rtc.style.top = 0;
+        rtc.style.width='100%';
+        rtc.style.height = '100%';
+        this.appendChild(rtc);
     }
 
     async onProvider(providerGen, y) {
@@ -84,6 +94,7 @@ chatroom.Name = 'chat-room';
 chatroom.Template = `
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 <pre id='log'></pre>
+<slot name="video" style="position: absolute;left: 0;top: 0;width: 100%;height: 100%;z-index: 10;"></slot>
 <button id='ping'>Ping</button>
 `;
 
