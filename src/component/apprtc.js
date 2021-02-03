@@ -11,19 +11,22 @@ class AppRTC extends HTMLElement {
 
     startup() {
         this.room = this.getAttribute('room');
+        this.clientid = this.getAttribute('clientid');
         this.appendChild(AppRTC.Template.content.cloneNode(true));
         this.appcontroller = new AppController({
             errorMessages: [],
             isLoopback: false,
             warningMessages: false,
             roomId: this.room,
+            client_id: this.clientid,
             roomLink: window.location.href,
-            mediaConstraints: {'audio':{'optional':[]},'video':{'optional':[]}},
+            mediaConstraints: {'audio':true,'video':true},
             offerOptions: {},
             peerConnectionConfig: {
-                'iceServers': [],
+                'iceServers': [{"urls":["stun:stun.l.google.com:19302"]}],
                 'bundlePolicy': 'max-bundle',
-                'rtcpMuxPolicy': 'require'
+                'rtcpMuxPolicy': 'require',
+                "certificates":[{}],
             },
             peerConnectionConstraints: {'optional': []},
             iceServerRequestUrl: '',

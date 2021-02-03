@@ -46,8 +46,10 @@ class chatroom extends HTMLElement {
         this.watchTopic()
         node.libp2p._dht.provide(myCid)
 
+        console.log('clid will be:', id)
         let rtc = document.createElement('app-rtc');
         rtc.setAttribute('room', this.room);
+        rtc.setAttribute('clientid', id);
         rtc.setAttribute('slot', 'video');
         rtc.style.position = 'absolute';
         rtc.style.left = 0;

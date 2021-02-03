@@ -278,8 +278,10 @@ Call.prototype.connectToRoom_ = function(roomId) {
     // and have media and TURN. Since we send candidates as soon as the peer
     // connection generates them we need to wait for the signaling channel to be
     // ready.
+    console.log('waiting for ice server / media promises')
     Promise.all([this.getIceServersPromise_, this.getMediaPromise_])
         .then(function() {
+          console.log('starting signalling...')
           this.startSignaling_();
         }.bind(this)).catch(function(error) {
           this.onError_('Failed to start signaling: ' + error.message);
@@ -440,11 +442,11 @@ Call.prototype.startSignaling_ = function() {
           trace('Adding local stream.');
           this.pcClient_.addStream(this.localStream_);
         }
-        if (this.params_.isInitiator) {
+        //if (this.params_.isInitiator) {
           this.pcClient_.startAsCaller(this.params_.offerOptions);
-        } else {
-          this.pcClient_.startAsCallee(this.params_.messages);
-        }
+        //} else {
+        //  this.pcClient_.startAsCallee(this.params_.messages);
+        //}
       }.bind(this))
       .catch(function(e) {
         this.onError_('Create PeerConnection exception: ' + e);
@@ -491,7 +493,7 @@ Call.prototype.joinRoom_ = function() {
     client_id: this.params_.client_id,
     room_id: this.params_.roomId,
     room_link: this.params_.roomLink,
-    is_initiator: this.params_.isInitiator,
+    is_initiator: true,
 
     messages: [],
    })
@@ -505,7 +507,7 @@ Call.prototype.onRecvSignalingChannelMessage_ = function(msg) {
 
 Call.prototype.sendSignalingMessage_ = function(message) {
   var msgString = JSON.stringify(message);
-  if (this.params_.isInitiator) {
+  /*if (this.params_.isInitiator) {
     // Initiator posts all messages to GAE. GAE will either store the messages
     // until the other client connects, or forward the message to Collider if
     // the other client is already connected.
@@ -516,9 +518,9 @@ Call.prototype.sendSignalingMessage_ = function(message) {
     xhr.open('POST', path, true);
     xhr.send(msgString);
     trace('C->GAE: ' + msgString);
-  } else {
+  } else {*/
     this.channel_.send(msgString);
-  }
+  //}
 };
 
 Call.prototype.onError_ = function(message) {
