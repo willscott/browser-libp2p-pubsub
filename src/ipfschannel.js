@@ -18,7 +18,7 @@ class ipfschannel {
     send(jsonmsg) {
         console.log('sendmsg:', jsonmsg)
         let myCid = this.roomCid()
-        this.service.pubsub.publish(myCid.toString(), jsonmsg)
+        console.log(myCid.toString(), '=>', this.service.pubsub.publish(myCid.toString(), jsonmsg))
         return true;
     }
 
@@ -31,17 +31,18 @@ class ipfschannel {
     async open() {
         this.service = await service()
 
-        let myCid = this.roomCid()
-        this.service.pubsub.subscribe(myCid.toString(), (msg) => {
-            console.log("incoming msg:",msg)
-            this.onmessage(msg);
-        })
-
         return true;
     }
     register(roomid, clientid) {
         this.room = roomid;
-        console.log('register:', roomid, JSON.stringify(clientid))
+        let myCid = this.roomCid()
+        console.log('register:', roomid, myCid.toString(), JSON.stringify(clientid))
+        this.service.pubsub.subscribe(myCid.toString(), (msg) => {
+            var textDecoder = new TextDecoder("utf-8");
+            let rawMsg = textDecoder.decode(msg.data);
+            console.log("incoming msg:",msg, rawMsg)
+            this.onmessage(rawMsg);
+        })
         return true;
     }
 }
