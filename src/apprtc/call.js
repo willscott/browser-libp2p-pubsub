@@ -442,11 +442,11 @@ Call.prototype.startSignaling_ = function() {
           trace('Adding local stream.');
           this.pcClient_.addStream(this.localStream_);
         }
-        //if (this.params_.isInitiator) {
+        if (this.params_.isInitiator) {
           this.pcClient_.startAsCaller(this.params_.offerOptions);
-        //} else {
-        //  this.pcClient_.startAsCallee(this.params_.messages);
-        //}
+        } else {
+          this.pcClient_.startAsCallee(this.params_.messages);
+        }
       }.bind(this))
       .catch(function(e) {
         this.onError_('Create PeerConnection exception: ' + e);
@@ -489,14 +489,18 @@ Call.prototype.joinRoom_ = function() {
       return;
     }.bind(this));
     */
-   resolve({
+   let resp = {
     client_id: this.params_.client_id,
     room_id: this.params_.roomId,
     room_link: this.params_.roomLink,
-    is_initiator: true,
+    is_initiator: 'true',
 
     messages: [],
-   })
+   };
+   if(!this.params_.isInitiator) {
+     resp.is_initiator = 'false';
+   }
+   resolve(resp);
   }.bind(this));
 };
 

@@ -11,6 +11,7 @@ class chatroom extends HTMLElement {
         
         const shadowRoot = this.attachShadow({mode: 'open'})
         .appendChild(chatroom.Template.content.cloneNode(true));
+        this.shadowRoot.children[3].addEventListener('click', this.onClick.bind(this))
         this.log = '';
         this.joinRoom();
         this.Render();
@@ -29,7 +30,8 @@ class chatroom extends HTMLElement {
     }
 
     async onClick() {
-        await this.node.pubsub.publish(this.roomCid().toString(), 'ping from ' + (await this.node.id()).toString())
+        let myCid = this.roomCid()
+        console.log('pub ', myCid.toString(), this.node.pubsub.publish(myCid.toString(), "ping"))
     }
 
     async joinRoom() {
@@ -43,13 +45,16 @@ class chatroom extends HTMLElement {
         let myCid = this.roomCid()
 
         //this.onProvider(node.libp2p._dht.findProviders(myCid))
-        //this.watchTopic()
+        this.watchTopic()
         //node.libp2p._dht.provide(myCid)
+    }
 
-        console.log('clid will be:', id)
+    makeCall(me, them) {
+        console.log('clid will be:', me)
         let rtc = document.createElement('app-rtc');
         rtc.setAttribute('room', this.room);
-        rtc.setAttribute('clientid', id);
+        rtc.setAttribute('clientid', me);
+        rtc.setAttribute('remoteid', them);
         rtc.setAttribute('slot', 'video');
         rtc.style.position = 'absolute';
         rtc.style.left = 0;
@@ -83,16 +88,25 @@ class chatroom extends HTMLElement {
     }
     */
 
-    /*
+    
     async watchTopic() {
         let myCid = this.roomCid()
+        const { id, agentVersion, protocolVersion } = await this.node.id();
         this.node.pubsub.subscribe(myCid.toString(), (msg) => {
             this.log += JSON.stringify(msg)
             this.Render()
+            if (msg.from == id) {
+                return
+            }
+            this.node.pubsub.unsubscribe(myCid.toString())
+            this.makeCall(id, msg.from)
         })
-        console.log(this.node.pubsub)
+
+        setTimeout(() => {
+            console.log('pub ', myCid.toString(), this.node.pubsub.publish(myCid.toString(), "ping"))
+        }, 2000)
     }
-    */
+    
 
     Close() {
         this.innerHTML = "";
@@ -106,7 +120,7 @@ chatroom.Template = `
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 <pre id='log'></pre>
 <slot name="video" style="position: absolute;left: 0;top: 0;width: 100%;height: 100%;z-index: 10;"></slot>
-<button id='ping'>Ping</button>
+<button id='ping'>Probe for others</button>
 `;
 
 

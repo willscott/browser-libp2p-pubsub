@@ -12,6 +12,11 @@ class AppRTC extends HTMLElement {
     startup() {
         this.room = this.getAttribute('room');
         this.clientid = this.getAttribute('clientid');
+        this.remoteid = this.getAttribute('remoteid');
+        let initiator = false;
+        if ([this.clientid, this.remoteid].sort()[0] == this.clientid) {
+            initiator = true;
+        }
         this.appendChild(AppRTC.Template.content.cloneNode(true));
         this.appcontroller = new AppController({
             errorMessages: [],
@@ -33,6 +38,7 @@ class AppRTC extends HTMLElement {
             iceServerTransports: '',
             wssUrl: new ipfschannel(),
             wssPostUrl: '',
+            isInitiator: initiator,
             bypassJoinConfirmation: true,
             versionInfo: 'libp2p-dev',
           });
