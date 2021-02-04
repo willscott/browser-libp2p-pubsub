@@ -42,9 +42,9 @@ class chatroom extends HTMLElement {
 
         let myCid = this.roomCid()
 
-        this.onProvider(node.libp2p._dht.findProviders(myCid))
-        this.watchTopic()
-        node.libp2p._dht.provide(myCid)
+        //this.onProvider(node.libp2p._dht.findProviders(myCid))
+        //this.watchTopic()
+        //node.libp2p._dht.provide(myCid)
 
         console.log('clid will be:', id)
         let rtc = document.createElement('app-rtc');
@@ -59,23 +59,31 @@ class chatroom extends HTMLElement {
         this.appendChild(rtc);
     }
 
+    /*
     async onProvider(providerGen, y) {
         if (y && y.done) {
             setTimeout(() => {
                 let myCid = this.roomCid()
                 this.onProvider(this.node.libp2p._dht.findProviders(myCid))
-            }, 60*1000)
+            }, 30*1000)
             return
         } else if (y && y.value) {
             if (y.value.id.toString() != (await this.node.id()).toString()) {
                 // found someone else in the room.
                 // TODO: attempt additional connections to them.
+                console.log('Found another peer via DHT!');
+                let conns = await this.node.swarm.peers()
+                this.node.swarm.connect(
+                    `${conns[0].addr.toString()}/p2p-circuit/p2p/${y.value.id}`
+                  );
                 console.log(y.value)
             }
         }
         providerGen.next().then((r) => {this.onProvider(providerGen, r);})
     }
+    */
 
+    /*
     async watchTopic() {
         let myCid = this.roomCid()
         this.node.pubsub.subscribe(myCid.toString(), (msg) => {
@@ -84,6 +92,7 @@ class chatroom extends HTMLElement {
         })
         console.log(this.node.pubsub)
     }
+    */
 
     Close() {
         this.innerHTML = "";

@@ -38,6 +38,9 @@ class ipfschannel {
         let myCid = this.roomCid()
         console.log('register:', roomid, myCid.toString(), JSON.stringify(clientid))
         this.service.pubsub.subscribe(myCid.toString(), (msg) => {
+            if (msg.from == clientid) {
+                return;
+            }
             var textDecoder = new TextDecoder("utf-8");
             let rawMsg = textDecoder.decode(msg.data);
             console.log("incoming msg:",msg, rawMsg)
