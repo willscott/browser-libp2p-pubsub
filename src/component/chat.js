@@ -98,7 +98,9 @@ class chatroom extends HTMLElement {
             if (msg.from == id) {
                 return
             }
+            // we should pong to let them know as well...
             this.node.pubsub.unsubscribe(myCid.toString())
+            console.log('pub ', myCid.toString(), this.node.pubsub.publish(myCid.toString(), "pong"))
             this.makeCall(id, msg.from)
         })
 
