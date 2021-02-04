@@ -43,6 +43,9 @@ function sendAsyncUrlRequest(method, url, body) {
 // async. If async is false, the xhr will be executed sync and a
 // resolved promise is returned.
 function sendUrlRequest(method, url, async, body) {
+  console.log('Not following through on what would have been a server request.', url)
+  return new Promise((r) => { r();})
+  /*
   return new Promise(function(resolve, reject) {
     var xhr;
     var reportResults = function() {
@@ -71,6 +74,7 @@ function sendUrlRequest(method, url, async, body) {
       reportResults();
     }
   });
+  */
 }
 
 // Returns a list of ICE servers after requesting it from the ICE server
