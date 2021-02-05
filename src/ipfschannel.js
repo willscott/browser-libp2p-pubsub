@@ -44,7 +44,12 @@ class ipfschannel {
             var textDecoder = new TextDecoder("utf-8");
             let rawMsg = textDecoder.decode(msg.data);
             console.log("incoming msg:",msg, rawMsg)
-            this.onmessage(rawMsg);
+            try {
+                JSON.parse(rawMsg)
+                this.onmessage(rawMsg);
+            } catch(e) {
+                return
+            }
         })
         return true;
     }

@@ -28,7 +28,7 @@ class AppRTC extends HTMLElement {
             mediaConstraints: {'audio':true,'video':true},
             offerOptions: {},
             peerConnectionConfig: {
-                'iceServers': [{"urls":["stun:stun.l.google.com:19302"]}],
+                'iceServers': [{"urls":["stun:stun.l.google.com:19302"]},{"urls":["turn:numb.viagenie.ca"],username:"willscott+ipfs@gmail.com",credential:"ipfsipfs"}],
                 'bundlePolicy': 'max-bundle',
                 'rtcpMuxPolicy': 'require',
                 "certificates":[{}],
