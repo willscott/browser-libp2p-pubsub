@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "cids": "^1.1.5",
-    "ipfs": "^0.54.0",
+    "ipfs": "^0.66.0",
     "libp2p-gossipsub": "^0.8.0",
     "webrtc-adapter": "^7.7.0"
   },
